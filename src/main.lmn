@@ -1,0 +1,42 @@
+<root bg="#0c1c30" padding="28" gap="18">
+  <label class="title" height="40px" text="Settings" />
+
+  <column class="group" gap="10" padding="16">
+    <label class="group-title" text="Appearance" />
+    <row gap="10" align="center">
+      <label class="caption" width="120px" text="Theme" />
+      <dropdown bind-value="theme">
+        <option value="dark"   label="Dark" />
+        <option value="light"  label="Light" />
+        <option value="system" label="Follow system" />
+      </dropdown>
+    </row>
+    <column gap="4">
+      <label class="caption" text="Density" />
+      <radio group="density" value="compact"     label="Compact" />
+      <radio group="density" value="comfortable" label="Comfortable" checked="true" />
+      <radio group="density" value="spacious"    label="Spacious" />
+    </column>
+    <row gap="10" align="center">
+      <label class="caption" width="120px" text="UI scale" />
+      <slider id="scale" grow="1" height="28px" min="0.8" max="1.6" value="1.0"
+              step="0.1" bind-value="scale" />
+      <label class="caption" width="40px" text-align="end" bind-text="scale_label" text="1.0" />
+    </row>
+  </column>
+
+  <column class="group" gap="8" padding="16">
+    <label class="group-title" text="Notifications" />
+    <checkbox id="email" label="Email digests"       bind-checked="notify_email" />
+    <checkbox id="push"  label="Push notifications"  bind-checked="notify_push" checked="true" />
+    <checkbox id="sound" label="Sounds"              bind-checked="notify_sound" />
+    <row gap="12" align="center">
+      <toggle id="dnd" width="48px" height="28px" bind-checked="dnd" />
+      <label class="caption" text="Do not disturb" />
+    </row>
+  </column>
+
+  <label class="summary" height="60px" wrap="word" bind-text="summary" text="" />
+
+  <script src="main.cdl" />
+</root>

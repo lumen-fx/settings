@@ -1,0 +1,48 @@
+import "lumen.cdl";
+
+// Every control writes a signal; `derive` recomputes the summary from the
+// full set whenever any of them changes - no per-control wiring. candela has
+// no closure value, so the recompute body is a named function and its
+// parameters arrive as the current dep values, in `deps` order.
+
+fn calc_summary(theme: string, density: string, scale: float,
+                email: bool, push: bool, sound: bool, dnd: bool) {
+    let chan = "";
+    if email { chan = chan + "email "; }
+    if push { chan = chan + "push "; }
+    if sound { chan = chan + "sound "; }
+    if chan == "" { chan = "none"; }
+    let quiet = "";
+    if dnd { quiet = " - do not disturb"; }
+    return "Theme " + theme + " | density " + density + " | scale " + str(scale)
+        + " | notify via " + chan + quiet;
+}
+
+// Seed every dep with its authored default, and with the type the summary
+// expects: a derivation runs once at registration, so an unwritten cell would
+// otherwise reach `calc_summary` untyped.
+fn on_start() {
+    signal("theme").set("dark");
+    signal("density").set("comfortable");
+    signal("scale").set_float(1.0);
+    signal("scale_label").set("1.0");
+    signal("notify_email").set_bool(false);
+    signal("notify_push").set_bool(true);
+    signal("notify_sound").set_bool(false);
+    signal("dnd").set_bool(false);
+
+    lumen::derive("summary",
+        ["theme", "density", "scale", "notify_email", "notify_push",
+         "notify_sound", "dnd"],
+        "calc_summary");
+}
+
+fn on_slider(id: string, value: float) {
+    if id == "scale" {
+        // Round to one decimal for the caption.
+        let tenths = (value * 10.0).round() / 10.0;
+        signal("scale_label").set(str(tenths));
+    }
+}
+
+fn main() {}

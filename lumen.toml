@@ -1,0 +1,6 @@
+[app]
+entry = "main.lmn"
+
+[window]
+title = "Settings"
+size = [560, 660]
