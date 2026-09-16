@@ -20,16 +20,17 @@ fn calc_summary(theme: string, density: string, scale: float,
 
 // Seed every dep with its authored default, and with the type the summary
 // expects: a derivation runs once at registration, so an unwritten cell would
-// otherwise reach `calc_summary` untyped.
+// otherwise reach `calc_summary` untyped. The type argument on the handle is
+// what decides the type each cell is written with.
 fn on_start() {
-    signal("theme").set("dark");
-    signal("density").set("comfortable");
-    signal("scale").set_float(1.0);
-    signal("scale_label").set("1.0");
-    signal("notify_email").set_bool(false);
-    signal("notify_push").set_bool(true);
-    signal("notify_sound").set_bool(false);
-    signal("dnd").set_bool(false);
+    signal<string>("theme").set("dark");
+    signal<string>("density").set("comfortable");
+    signal<float>("scale").set(1.0);
+    signal<string>("scale_label").set("1.0");
+    signal<bool>("notify_email").set(false);
+    signal<bool>("notify_push").set(true);
+    signal<bool>("notify_sound").set(false);
+    signal<bool>("dnd").set(false);
 
     lumen::derive("summary",
         ["theme", "density", "scale", "notify_email", "notify_push",
@@ -41,7 +42,7 @@ fn on_slider(id: string, value: float) {
     if id == "scale" {
         // Round to one decimal for the caption.
         let tenths = (value * 10.0).round() / 10.0;
-        signal("scale_label").set(str(tenths));
+        signal<string>("scale_label").set(str(tenths));
     }
 }
 
